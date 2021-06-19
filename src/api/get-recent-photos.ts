@@ -5,23 +5,27 @@ import { toQueryParams } from '../helper/query-builder';
 
 export function useGetRecentPhotosEffect(params: FlickrRequest) {
   const [photo, setPhoto] = useState<Photo[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isError, setIsError] = useState<boolean>(false);
 
   const api = async (url: string) => {
-    setIsLoading(true);
     const response = await fetch(url);
     const flickerResponse: FlickrResponse = await response.json();
-    setPhoto(flickerResponse.photos.photo);
-    setIsLoading(false);
+    if (flickerResponse.photos?.photo?.length) {
+      setPhoto(flickerResponse.photos.photo);
+    }
   };
 
   const queryParams = useMemo(() => toQueryParams(params), [params]);
 
   useEffect(() => {
     api(
-      `${process.env.REACT_APP_API_URL}&api_key=${process.env.REACT_APP_API_KEY}&${queryParams}`,
-    ).catch((err) => console.log(err));
+      `${process.env.REACT_APP_API_URL}?method=flickr.photos.getRecent&api_key=${process.env.REACT_APP_API_KEY}&${queryParams}`,
+    )
+      .catch(() => {
+        setIsError(true);
+      })
+      .finally(() => setIsLoading(false));
   }, [queryParams]);
-
-  return { photo, isLoading };
+  return { isLoading, photo, isError };
 }
