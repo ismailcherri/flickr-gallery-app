@@ -41,6 +41,10 @@
     ]
   },
   "devDependencies": {
-    "prettier": "^2.3.1"
+    "@testing-library/react-hooks": "^7.0.0",
+    "@types/react-test-renderer": "^17.0.1",
+    "jest-fetch-mock": "^3.0.3",
+    "prettier": "^2.3.1",
+    "react-test-renderer": "^17.0.2"
   }
 }
