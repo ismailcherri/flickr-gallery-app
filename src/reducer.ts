@@ -45,10 +45,18 @@ export const reducer = (state: InitialState, action: Action) => {
   }
 
   if (action.type === 'ADD_TO_FAVORITES') {
-    action.payload.photo.favorite = true;
+    const photo = { ...action.payload.photo };
+    photo.favorite = true;
+    const currentPhotos = state.currentPhotos.map((photo) => {
+      if (photo.id === action.payload.photo.id) {
+        photo.favorite = true;
+      }
+      return photo;
+    });
     return {
       ...state,
-      favoritePhotos: [...state.favoritePhotos, action.payload.photo],
+      favoritePhotos: [...state.favoritePhotos, photo],
+      currentPhotos: currentPhotos,
     };
   }
 
