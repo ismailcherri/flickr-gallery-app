@@ -6,9 +6,30 @@ function getInitialResponse(page = 1): FlickrResponse {
   return {
     photos: {
       photo: [
-        { id: '1', server: '', secret: '', title: '', owner: '' },
-        { id: '2', server: '', secret: '', title: '', owner: '' },
-        { id: '3', server: '', secret: '', title: '', owner: '' },
+        {
+          id: '1',
+          server: '',
+          secret: '',
+          title: '',
+          owner: '',
+          favorite: false,
+        },
+        {
+          id: '2',
+          server: '',
+          secret: '',
+          title: '',
+          owner: '',
+          favorite: false,
+        },
+        {
+          id: '3',
+          server: '',
+          secret: '',
+          title: '',
+          owner: '',
+          favorite: false,
+        },
       ],
       page: page,
       perpage: 0,
@@ -40,6 +61,7 @@ describe('getRecentPhotos', () => {
     const result = await getRecentPhotos(req);
 
     expect(result).toStrictEqual(expectedResponse);
+    expect(fetchSpy).toHaveBeenCalled();
   });
 
   it('should return FlickrResponse', async () => {
@@ -55,5 +77,6 @@ describe('getRecentPhotos', () => {
     const result = await getRecentPhotos({ page: 1 });
 
     expect(result).toStrictEqual(expectedResponse);
+    expect(fetchSpy).toHaveBeenCalled();
   });
 });
