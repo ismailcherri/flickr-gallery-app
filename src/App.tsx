@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { AppContext } from './context';
+import { Photo } from './model/flickr-response';
 
 function App() {
   const { state, dispatch } = useContext(AppContext);
@@ -11,6 +12,14 @@ function App() {
     dispatch({ type: 'LOAD_IMAGES', payload: newParams });
   };
 
+  const handleFavorite = (photo: Photo) => {
+    if (!photo.favorite) {
+      dispatch({ type: 'ADD_TO_FAVORITES', payload: { photo } });
+      return;
+    }
+    dispatch({ type: 'REMOTE_FROM_FAVORITES', payload: { photo } });
+  };
+
   return (
     <>
       <h2>Flicker Gallery</h2>
@@ -18,7 +27,8 @@ function App() {
         {currentPhotos.map((photoItem) => {
           return (
             <div
-              key={photoItem.id + photoItem.secret}
+              key={photoItem.id}
+              onClick={() => handleFavorite(photoItem)}
               style={{
                 border: '1px solid red',
                 margin: '.5rem',
@@ -27,9 +37,11 @@ function App() {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
+                backgroundColor: photoItem.favorite ? 'yellow' : '',
+                cursor: 'pointer',
               }}
             >
-              <span>{photoItem.id + photoItem.secret}</span>&nbsp;
+              <span>{photoItem.title}</span>
             </div>
           );
         })}

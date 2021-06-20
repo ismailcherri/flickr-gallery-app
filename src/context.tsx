@@ -4,6 +4,7 @@ import { FlickrRequest } from './model/flickr-request';
 import { fromParams } from './helper/query-builder';
 import { Action, reducer } from './reducer';
 import { getRecentPhotos } from './api/get-recent-photos';
+import { getStoredFavorites, storeFavorites } from './helper/local-storage';
 
 export type InitialState = {
   isLoading: boolean;
@@ -63,6 +64,49 @@ export const AppProvider: FC = ({ children }) => {
       payload: { photos: photosToAdd, photoIds: photoIds },
     });
   }, [state.photos, state.photoIds]);
+
+  useEffect(() => {
+    if (state.currentPhotos.length !== 0) {
+      return;
+    }
+    const photos = getStoredFavorites();
+
+    if (!photos || photos.length === 0) {
+      return;
+    }
+
+    photos.map((photo) => {
+      photo.favorite = true;
+      return photo;
+    });
+
+    dispatch({
+      type: 'IMAGES_LOADED',
+      payload: {
+        photos,
+      },
+    });
+
+    dispatch({
+      type: 'LOAD_FAVORITES',
+      payload: {
+        photos,
+      },
+    });
+  }, [state.currentPhotos]);
+
+  useEffect(() => {
+    if (state.favoritePhotos.length === 0) {
+      const photos = getStoredFavorites();
+
+      if (!photos || photos.length === 0) {
+        return;
+      }
+    }
+
+    storeFavorites(state.favoritePhotos);
+  }, [state.favoritePhotos]);
+
   return (
     <AppContext.Provider value={{ state, dispatch }}>
       {children}
