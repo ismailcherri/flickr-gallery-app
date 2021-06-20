@@ -1,4 +1,5 @@
 import { fromParams, toQueryParams } from './query-builder';
+import { FlickrRequest } from '../model/flickr-request';
 
 describe('toQueryParam', () => {
   it('should convert object to query params', () => {
@@ -37,14 +38,14 @@ describe('toQueryParam', () => {
 
 describe('fromParams', () => {
   it('should accept empty object', () => {
-    const testObj = {};
+    const testObj: FlickrRequest = {};
 
     const result = fromParams(testObj);
     expect(result).toBeTruthy();
   });
 
   it('should return default values', () => {
-    const testObj = {};
+    const testObj: FlickrRequest = {};
 
     const result = fromParams(testObj);
 
