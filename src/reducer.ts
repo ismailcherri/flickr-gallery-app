@@ -8,9 +8,12 @@ export type Action =
   | { type: 'ERROR'; payload: boolean }
   | {
       type: 'IMAGES_LOADED';
-      payload: { photos: Photo[]; photoIds: { [key: string]: string } };
+      payload: { photos: Photo[] };
     }
-  | { type: 'UPDATE_PHOTO_IDS'; payload: { [key: string]: string } };
+  | {
+      type: 'UPDATE_PHOTO_IDS';
+      payload: { photoIds: { [key: string]: string }; photos: Photo[] };
+    };
 
 export const reducer = (state: InitialState, action: Action) => {
   if (action.type === 'LOAD_IMAGES') {
@@ -25,8 +28,7 @@ export const reducer = (state: InitialState, action: Action) => {
   if (action.type === 'IMAGES_LOADED') {
     return {
       ...state,
-      photos: [...state.photos, ...action.payload.photos],
-      photoIds: { ...state.photoIds, ...action.payload.photoIds },
+      photos: action.payload.photos,
       isLoading: false,
     };
   }
@@ -34,7 +36,8 @@ export const reducer = (state: InitialState, action: Action) => {
   if (action.type === 'UPDATE_PHOTO_IDS') {
     return {
       ...state,
-      photoIds: { ...state.photoIds, ...action.payload },
+      photoIds: action.payload.photoIds,
+      currentPhotos: [...state.currentPhotos, ...action.payload.photos],
     };
   }
 
