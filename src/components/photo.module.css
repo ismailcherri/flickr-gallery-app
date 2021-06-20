@@ -1,0 +1,8 @@
+.photo {
+    border-radius: 0.625rem;
+    width: 18.75rem;
+    overflow: hidden;
+    margin: 1.25rem;
+    box-shadow: 1px 1px 1px #c6c5c5;
+    position: relative;
+}

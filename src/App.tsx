@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { AppContext } from './context';
-import { Photo } from './model/flickr-response';
+import { PhotoComponent } from './components/photo';
+import style from './app.module.css';
 
 function App() {
   const { state, dispatch } = useContext(AppContext);
@@ -12,40 +13,17 @@ function App() {
     dispatch({ type: 'LOAD_IMAGES', payload: newParams });
   };
 
-  const handleFavorite = (photo: Photo) => {
-    if (!photo.favorite) {
-      dispatch({ type: 'ADD_TO_FAVORITES', payload: { photo } });
-      return;
-    }
-    dispatch({ type: 'REMOTE_FROM_FAVORITES', payload: { photo } });
-  };
-
   return (
     <>
-      <h2>Flicker Gallery</h2>
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {currentPhotos.map((photoItem) => {
-          return (
-            <div
-              key={photoItem.id}
-              onClick={() => handleFavorite(photoItem)}
-              style={{
-                border: '1px solid red',
-                margin: '.5rem',
-                height: '5rem',
-                width: '30%',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: photoItem.favorite ? 'yellow' : '',
-                cursor: 'pointer',
-              }}
-            >
-              <span>{photoItem.title}</span>
-            </div>
-          );
-        })}
+      <div className={style.main}>
+        <h2>Flicker Gallery</h2>
+        <div className={style.photoContainer}>
+          {currentPhotos.map((photoItem) => {
+            return <PhotoComponent photo={photoItem} key={photoItem.id} />;
+          })}
+        </div>
       </div>
+
       <button onClick={() => handleDispatch()}>Get More Photos</button>
     </>
   );
