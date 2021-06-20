@@ -2,16 +2,11 @@ import React, { useContext } from 'react';
 import { AppContext } from './context';
 import { PhotoComponent } from './components/photo';
 import style from './app.module.css';
+import InfiniteScrollComponent from './components/infinite-scroll';
 
 function App() {
-  const { state, dispatch } = useContext(AppContext);
-  const { params, currentPhotos } = state;
-
-  const handleDispatch = () => {
-    const newParams = { ...params };
-    newParams.page = newParams.page ? newParams.page + 1 : 1;
-    dispatch({ type: 'LOAD_IMAGES', payload: newParams });
-  };
+  const { state } = useContext(AppContext);
+  const { currentPhotos } = state;
 
   return (
     <>
@@ -24,7 +19,7 @@ function App() {
         </div>
       </div>
 
-      <button onClick={() => handleDispatch()}>Get More Photos</button>
+      <InfiniteScrollComponent />
     </>
   );
 }
